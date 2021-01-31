@@ -15,7 +15,7 @@ class GroupController(val groupRepository: GroupRepository) {
 
     @GetMapping
     fun list():ResponseEntity<List<Group>>{
-        return ResponseEntity.ok(groupRepository.findAll())
+        return ResponseEntity.ok(groupRepository.findAll().sortedBy { it.name })
     }
 
     @PostMapping
