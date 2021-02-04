@@ -4,6 +4,7 @@ import io.home.expensestracker.mapper.TransactionMapper
 import io.home.expensestracker.model.Transaction
 import io.home.expensestracker.repository.CategoryRepository
 import io.home.expensestracker.repository.TransactionRepository
+import io.home.expensestracker.web.response.ExpensesChartResponse
 import org.springframework.stereotype.Service
 import java.io.File
 import java.time.LocalDate
@@ -43,6 +44,18 @@ class TransactionService(
         transaction.category = category
 
         return transactionRepository.save(transaction)
+    }
+
+    fun categoryChart(startDate: LocalDate, endDate: LocalDate): List<ExpensesChartResponse>{
+        val group =
+            transactionRepository.findDebitTransactionGroupedByCategory(startDate, endDate);
+        return group.map { ExpensesChartResponse(it.name,it.amount) }
+    }
+
+    fun groupChart(startDate: LocalDate, endDate: LocalDate): List<ExpensesChartResponse>{
+        val group =
+            transactionRepository.findDebitTransactionGroupedByGroup(startDate, endDate);
+        return group.map { ExpensesChartResponse(it.name,it.amount) }
     }
 
 }
